@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
+const NOT_FOUND = 404;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -22,7 +23,10 @@ app.get('/talker', async (req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const talkers = await utils.getJsonFile(talkerFile);
-  const talkersFiltered = talkers.filter((a) => a.id === Number(req.params.id));
+  const talkersFiltered = talkers.find(({ id }) => id === Number(req.params.id));
+  if (!talkersFiltered) {
+    return res.status(NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' });
+  } 
   return res.status(HTTP_OK_STATUS).json(talkersFiltered);
 });
 
