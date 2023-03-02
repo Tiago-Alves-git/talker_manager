@@ -1,9 +1,9 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 
 const writeJsonFile = (filePath, content) => {
   try {
-    fs.writeFileSync(path.resolve(__dirname, filePath), JSON.stringify(content),
+    fs.writeFile(path.resolve(__dirname, filePath), JSON.stringify(content),
     { encoding: 'utf-8' });
     return content;
   } catch (__error) {
@@ -11,9 +11,9 @@ const writeJsonFile = (filePath, content) => {
   }
 };
 
-const getJsonFile = (filePath) => {
+const getJsonFile = async (filePath) => {
   try {
-    const res = fs.readFileSync(path.resolve(__dirname, filePath), { encoding: 'utf-8' });
+    const res = await fs.readFile(path.resolve(__dirname, '..', filePath), { encoding: 'utf-8' });
     return JSON.parse(res);
   } catch (__error) {
     return [];
