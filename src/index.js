@@ -4,6 +4,8 @@ const utils = require('./utils/utilsJson');
 
 const talkerFile = 'talker.json';
 
+const token = require('./utils/randomToken');
+
 const app = express();
 app.use(express.json());
 
@@ -28,6 +30,16 @@ app.get('/talker/:id', async (req, res) => {
     return res.status(NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' });
   } 
   return res.status(HTTP_OK_STATUS).json(talkersFiltered);
+});
+
+app.get('/login', async (req, res) => {
+  const tudoOk = 'tudo okay';
+  return res.status(HTTP_OK_STATUS).json({ message: `${tudoOk}` });
+});
+
+app.post('/login', async (req, res) => {
+  console.log(req.body);
+  res.status(HTTP_OK_STATUS).json({ token: `${token()}` });
 });
 
 app.listen(PORT, () => {
