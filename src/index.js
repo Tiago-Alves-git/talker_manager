@@ -5,6 +5,7 @@ const utils = require('./utils/utilsJson');
 const talkerFile = 'talker.json';
 
 const token = require('./utils/randomToken');
+const { validEmail, validPassword } = require('./middleWares');
 
 const app = express();
 app.use(express.json());
@@ -37,7 +38,7 @@ app.get('/login', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json({ message: `${tudoOk}` });
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', validEmail, validPassword, async (req, res) => {
   console.log(req.body);
   res.status(HTTP_OK_STATUS).json({ token: `${token()}` });
 });
