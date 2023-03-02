@@ -20,6 +20,12 @@ app.get('/talker', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
+app.get('/talker/:id', async (req, res) => {
+  const talkers = await utils.getJsonFile(talkerFile);
+  const talkersFiltered = talkers.filter((a) => a.id === Number(req.params.id));
+  return res.status(HTTP_OK_STATUS).json(talkersFiltered);
+});
+
 app.listen(PORT, () => {
   console.log(`Online1, ${PORT} `);
 });
