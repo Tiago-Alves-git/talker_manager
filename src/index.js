@@ -5,7 +5,8 @@ const utils = require('./utils/utilsJson');
 const talkerFile = 'talker.json';
 
 const token = require('./utils/randomToken');
-const { validEmail, validPassword } = require('./middleWares');
+const { validEmail, validPassword, validAuthorization,
+  validUserName, validUserAge, validUserRate, validUserTalk } = require('./middleWares');
 
 const app = express();
 app.use(express.json());
@@ -39,8 +40,20 @@ app.get('/login', async (req, res) => {
 });
 
 app.post('/login', validEmail, validPassword, async (req, res) => {
-  console.log(req.body);
   res.status(HTTP_OK_STATUS).json({ token: `${token()}` });
+});
+
+app.post('/talker', 
+validAuthorization, 
+validUserName, 
+validUserAge, 
+validUserTalk, 
+validUserRate, 
+async (req, res) => {
+  const talkerList = await utils.getJsonFile(talkerFile);
+  const newUser = { id: talkerList[talkerList.length - 1].id + 1, ...req.body };
+  utils.writeJsonFile(talkerFile, [...talkerList, newUser]);
+  return res.status(201).json(newUser);
 });
 
 app.listen(PORT, () => {

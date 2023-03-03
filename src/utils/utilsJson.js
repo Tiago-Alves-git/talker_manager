@@ -3,7 +3,7 @@ const path = require('path');
 
 const writeJsonFile = (filePath, content) => {
   try {
-    fs.writeFile(path.resolve(__dirname, filePath), JSON.stringify(content),
+    fs.writeFile(path.resolve(__dirname, '..', filePath), JSON.stringify(content),
     { encoding: 'utf-8' });
     return content;
   } catch (__error) {
