@@ -73,6 +73,16 @@ async (req, res) => {
   return res.status(200).json({ id: +id, ...req.body });
 });
 
+app.delete('/talker/:id', validAuthorization, async (req, res) => {
+  const { id } = req.params;
+  const talkerList = await utils.getJsonFile(talkerFile);
+  const userToDelete = talkerList.findIndex((user) => user.id === Number(id));
+  talkerList.splice(userToDelete, 1);
+  console.log(talkerList);
+  await utils.writeJsonFile(talkerFile, talkerList);
+  return res.status(204).json({ });
+});
+
 app.listen(PORT, () => {
   console.log(`Online1, ${PORT} `);
 });
