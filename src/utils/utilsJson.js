@@ -1,13 +1,13 @@
 const fs = require('fs/promises');
 const path = require('path');
 
-const writeJsonFile = (filePath, content) => {
+const writeJsonFile = async (filePath, content) => {
   try {
-    fs.writeFile(path.resolve(__dirname, '..', filePath), JSON.stringify(content),
+    await fs.writeFile(path.resolve(__dirname, '..', filePath), JSON.stringify(content, null, 2),
     { encoding: 'utf-8' });
-    return content;
-  } catch (__error) {
-    return [];
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };
 

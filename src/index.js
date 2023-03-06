@@ -52,8 +52,25 @@ validUserRate,
 async (req, res) => {
   const talkerList = await utils.getJsonFile(talkerFile);
   const newUser = { id: talkerList[talkerList.length - 1].id + 1, ...req.body };
-  utils.writeJsonFile(talkerFile, [...talkerList, newUser]);
+  const updateTalkers = [...talkerList, newUser];
+  await utils.writeJsonFile(talkerFile, updateTalkers);
   return res.status(201).json(newUser);
+});
+
+app.put('/talker/:id', 
+validAuthorization, 
+validUserName, 
+validUserAge, 
+validUserTalk, 
+validUserRate, 
+async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkerList = await utils.getJsonFile(talkerFile);
+  talkerList[+(id)] = { id: +(id), name, age, talk };
+
+  await utils.writeJsonFile(talkerFile, [...talkerList]);
+  return res.status(200).json({ id: +id, ...req.body });
 });
 
 app.listen(PORT, () => {
