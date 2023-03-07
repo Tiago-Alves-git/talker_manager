@@ -25,6 +25,21 @@ app.get('/talker', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkers);
 });
 
+app.get('/talker/search', validAuthorization, async (req, res) => {
+    const { q } = req.query;
+    console.log(q);
+    const talkersData = await utils.getJsonFile(talkerFile);
+
+    if (q || q.length > 0) {
+      const filteredTalkerData = talkersData
+        .filter(({ name }) => name.toLowerCase().includes(q.toLowerCase()));
+
+      return res.status(200).json(filteredTalkerData);
+    }
+
+    return res.status(200).json(talkersData);
+  });
+
 app.get('/talker/:id', async (req, res) => {
   const talkers = await utils.getJsonFile(talkerFile);
   const talkersFiltered = talkers.find(({ id }) => id === Number(req.params.id));
